@@ -1,5 +1,5 @@
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Component, importProvidersFrom, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { Router } from '@angular/router';
 import { combineLatest, Observable, startWith } from 'rxjs';
@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PurchaseOrderForm implements OnInit {
   poForm!: FormGroup;
+  showSuccess = false;
 
   suppliers$!: Observable<Supplier[]>;
   warehouses$!: Observable<Warehouse[]>;
@@ -111,6 +112,7 @@ export class PurchaseOrderForm implements OnInit {
         const quantity = item.get('quantity')!.value || 1;
         const unitPrice = selected.price;
         const lineTotal = quantity * unitPrice;
+        console.log(lineTotal);
 
         item.patchValue({ unitPrice, lineTotal });
         this.calculateTotals();
@@ -119,9 +121,13 @@ export class PurchaseOrderForm implements OnInit {
   }
 
   onSubmit() {
-    if (this.poForm.invalid) return;
+    if (this.poForm.invalid) {
+      this.poForm.markAllAsTouched();
+      return;
+    }
 
     const formValue = this.poForm.value;
+
     const payload = {
       ...formValue,
       items: formValue.items.map((item: any) => ({
@@ -131,10 +137,15 @@ export class PurchaseOrderForm implements OnInit {
         lineTotal: item.lineTotal,
       })),
     };
-    console.log(payload);
 
-    this.poService.createOrder(payload).subscribe(() => {
-      this.router.navigate(['/purchase-orders']);
+    this.poService.createOrder(payload).subscribe({
+      next: (data) => {
+        console.log(' Order created:', data);
+        alert('order submitted successfully');
+      },
+      error: (err) => {
+        console.error(' Error creating order:', err);
+      },
     });
   }
 

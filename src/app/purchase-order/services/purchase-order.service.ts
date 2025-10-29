@@ -1,23 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Product, PurchaseOrderItem, Supplier, VatRate, Warehouse } from '../Models/po.interface';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class PurchaseOrderService {
-   baseUrl = 'http://localhost:3000';
+  baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  getSuppliers(): Observable<any[]> {
+  getSuppliers(): Observable<Supplier[]> {
     return this.http.get<any[]>(`${this.baseUrl}/suppliers`);
   }
-  getWarehouses(): Observable<any[]> {
+  getWarehouses(): Observable<Warehouse[]> {
     return this.http.get<any[]>(`${this.baseUrl}/warehouses`);
   }
-  getProducts(): Observable<any[]> {
+  getProducts(): Observable<Product[]> {
     return this.http.get<any[]>(`${this.baseUrl}/products`);
   }
-  getVatRates(): Observable<any[]> {
+  getVatRates(): Observable<VatRate[]> {
     return this.http.get<any[]>(`${this.baseUrl}/vatRates`);
   }
 
@@ -31,5 +32,9 @@ export class PurchaseOrderService {
 
   getOrderById(id: number): Observable<any> {
     return this.http.get(`${this.baseUrl}/purchaseOrders/${id}`);
+  }
+
+  getAllOrders(): Observable<PurchaseOrderItem[]> {
+    return this.http.get<PurchaseOrderItem[]>(`${this.baseUrl}/purchaseOrders`);
   }
 }
