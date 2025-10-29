@@ -1,10 +1,6 @@
 <div class="container mt-8 mx-auto py-6 px-4 max-w-7xl">
   <h3 class="text-2xl font-bold text-white mb-6">Create Purchase Order</h3>
-   @if (showSuccess) {
-    <alert type="success" [dismissible]="true">
-      ✅ Purchase order submitted successfully!
-    </alert>
-  }
+  
 
   <form [formGroup]="poForm" (ngSubmit)="onSubmit()" class="bg-white rounded-lg shadow-lg p-6">
     <!-- Header -->
