@@ -1,1 +1,89 @@
-<p>purchase-order-form works!</p>
+<div class="container py-4">
+  <h3>Create Purchase Order</h3>
+
+  <form [formGroup]="poForm" (ngSubmit)="onSubmit()">
+    <!-- Header -->
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <label>Supplier</label>
+        <select class="form-select" formControlName="supplier">
+          <option value="">Select</option>
+          <option *ngFor="let s of suppliers$ | async" [value]="s.name">{{ s.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label>Warehouse</label>
+        <select class="form-select" formControlName="warehouse">
+          <option value="">Select</option>
+          <option *ngFor="let w of warehouses$ | async" [value]="w.name">{{ w.name }}</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label>Order Date</label>
+        <input type="date" class="form-control" formControlName="orderDate" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Shipping Address</label>
+      <textarea class="form-control" formControlName="shippingAddress"></textarea>
+    </div>
+
+    <div class="mb-3 col-md-3">
+      <label>VAT Rate (%)</label>
+      <select class="form-select" formControlName="vatRate">
+        <option value="">Select</option>
+        <option *ngFor="let v of vatRates$ | async" [value]="v.rate">{{ v.rate }}%</option>
+      </select>
+    </div>
+
+    <!-- Items Table -->
+    <h5>Items</h5>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody formArrayName="items">
+        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+          <td>
+            <select class="form-select" formControlName="product">
+              <option value="">Select</option>
+              <option *ngFor="let p of products$ | async" [value]="p.name">{{ p.name }}</option>
+            </select>
+          </td>
+          <td><input type="number" formControlName="quantity" class="form-control" (input)="calculateTotals()" /></td>
+          <td><input type="number" formControlName="unitPrice" class="form-control" (input)="calculateTotals()" /></td>
+          <td>{{ item.value.quantity * item.value.unitPrice }}</td>
+          <td><button class="btn btn-sm btn-danger" (click)="removeItem(i)" type="button">X</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-primary btn-sm" type="button" (click)="addItem()">+ Add Item</button>
+
+    <!-- Summary -->
+    <div class="mt-4">
+      <p><strong>Subtotal:</strong> {{ poForm.value.subtotal || 0 }}</p>
+      <p><strong>VAT:</strong> {{ poForm.value.vatAmount || 0 }}</p>
+      <p><strong>Grand Total:</strong> {{ poForm.value.grandTotal || 0 }}</p>
+    </div>
+
+    <!-- Notes & Attach -->
+    <div class="mb-3">
+      <label>Memo / Notes</label>
+      <textarea class="form-control" formControlName="notes"></textarea>
+    </div>
+    <div class="mb-3">
+      <label>Attachment</label>
+      <input type="file" class="form-control" (change)="onFileChange($event)" />
+    </div>
+
+    <!-- Buttons -->
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-success">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="router.navigate(['/purchase-orders'])">Cancel</button>
+    </div>
+  </form>
+</div>
+
