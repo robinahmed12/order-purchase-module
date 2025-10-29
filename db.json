@@ -1,33 +1,93 @@
 {
   "suppliers": [
-    { "id": 1, "name": "Alpha Ltd" },
-    { "id": 2, "name": "Beta Traders" },
-    { "id": 3, "name": "Gamma Distributors" },
-    { "id": 4, "name": "Delta Supplies" },
-    { "id": 5, "name": "Orion Imports" }
+    {
+      "id": "1",
+      "name": "Alpha Ltd"
+    },
+    {
+      "id": "2",
+      "name": "Beta Traders"
+    },
+    {
+      "id": "3",
+      "name": "Gamma Distributors"
+    },
+    {
+      "id": "4",
+      "name": "Delta Supplies"
+    },
+    {
+      "id": "5",
+      "name": "Orion Imports"
+    }
   ],
   "warehouses": [
-    { "id": 1, "name": "Dhaka Warehouse" },
-    { "id": 2, "name": "Chittagong Warehouse" },
-    { "id": 3, "name": "Khulna Warehouse" },
-    { "id": 4, "name": "Sylhet Warehouse" }
+    {
+      "id": "1",
+      "name": "Dhaka Warehouse"
+    },
+    {
+      "id": "2",
+      "name": "Chittagong Warehouse"
+    },
+    {
+      "id": "3",
+      "name": "Khulna Warehouse"
+    },
+    {
+      "id": "4",
+      "name": "Sylhet Warehouse"
+    }
   ],
   "products": [
-    { "id": 1, "name": "Product A", "price": 100 },
-    { "id": 2, "name": "Product B", "price": 200 },
-    { "id": 3, "name": "Product C", "price": 350 },
-    { "id": 4, "name": "Product D", "price": 120 },
-    { "id": 5, "name": "Product E", "price": 500 },
-    { "id": 6, "name": "Product F", "price": 800 }
+    {
+      "id": "1",
+      "name": "Product A",
+      "price": 100
+    },
+    {
+      "id": "2",
+      "name": "Product B",
+      "price": 200
+    },
+    {
+      "id": "3",
+      "name": "Product C",
+      "price": 350
+    },
+    {
+      "id": "4",
+      "name": "Product D",
+      "price": 120
+    },
+    {
+      "id": "5",
+      "name": "Product E",
+      "price": 500
+    },
+    {
+      "id": "6",
+      "name": "Product F",
+      "price": 800
+    }
   ],
   "vatRates": [
-    { "id": 1, "rate": 5 },
-    { "id": 2, "rate": 10 },
-    { "id": 3, "rate": 15 }
+    {
+      "id": "1",
+      "rate": 5
+    },
+    {
+      "id": "2",
+      "rate": 10
+    },
+    {
+      "id": "3",
+      "rate": 15
+    }
   ],
   "purchaseOrders": [
     {
-      "id": 1,
+      "id": "1",
       "poNumber": "PO-1001",
       "supplier": "Alpha Ltd",
       "warehouse": "Dhaka Warehouse",
@@ -35,8 +95,18 @@
       "vatRate": 5,
       "orderDate": "2025-10-10",
       "items": [
-        { "product": "Product A", "quantity": 10, "unitPrice": 100, "lineTotal": 1000 },
-        { "product": "Product C", "quantity": 5, "unitPrice": 350, "lineTotal": 1750 }
+        {
+          "product": "Product A",
+          "quantity": 10,
+          "unitPrice": 100,
+          "lineTotal": 1000
+        },
+        {
+          "product": "Product C",
+          "quantity": 5,
+          "unitPrice": 350,
+          "lineTotal": 1750
+        }
       ],
       "subtotal": 2750,
       "vatAmount": 137.5,
@@ -46,7 +116,7 @@
       "attachment": ""
     },
     {
-      "id": 2,
+      "id": "2",
       "poNumber": "PO-1002",
       "supplier": "Beta Traders",
       "warehouse": "Chittagong Warehouse",
@@ -54,8 +124,18 @@
       "vatRate": 10,
       "orderDate": "2025-09-28",
       "items": [
-        { "product": "Product D", "quantity": 20, "unitPrice": 120, "lineTotal": 2400 },
-        { "product": "Product E", "quantity": 3, "unitPrice": 500, "lineTotal": 1500 }
+        {
+          "product": "Product D",
+          "quantity": 20,
+          "unitPrice": 120,
+          "lineTotal": 2400
+        },
+        {
+          "product": "Product E",
+          "quantity": 3,
+          "unitPrice": 500,
+          "lineTotal": 1500
+        }
       ],
       "subtotal": 3900,
       "vatAmount": 390,
@@ -65,7 +145,7 @@
       "attachment": ""
     },
     {
-      "id": 3,
+      "id": "3",
       "poNumber": "PO-1003",
       "supplier": "Gamma Distributors",
       "warehouse": "Khulna Warehouse",
@@ -73,8 +153,18 @@
       "vatRate": 15,
       "orderDate": "2025-10-20",
       "items": [
-        { "product": "Product B", "quantity": 8, "unitPrice": 200, "lineTotal": 1600 },
-        { "product": "Product F", "quantity": 2, "unitPrice": 800, "lineTotal": 1600 }
+        {
+          "product": "Product B",
+          "quantity": 8,
+          "unitPrice": 200,
+          "lineTotal": 1600
+        },
+        {
+          "product": "Product F",
+          "quantity": 2,
+          "unitPrice": 800,
+          "lineTotal": 1600
+        }
       ],
       "subtotal": 3200,
       "vatAmount": 480,
@@ -84,7 +174,7 @@
       "attachment": ""
     },
     {
-      "id": 4,
+      "id": "4",
       "poNumber": "PO-1004",
       "supplier": "Delta Supplies",
       "warehouse": "Sylhet Warehouse",
@@ -92,8 +182,18 @@
       "vatRate": 10,
       "orderDate": "2025-10-25",
       "items": [
-        { "product": "Product A", "quantity": 15, "unitPrice": 100, "lineTotal": 1500 },
-        { "product": "Product E", "quantity": 2, "unitPrice": 500, "lineTotal": 1000 }
+        {
+          "product": "Product A",
+          "quantity": 15,
+          "unitPrice": 100,
+          "lineTotal": 1500
+        },
+        {
+          "product": "Product E",
+          "quantity": 2,
+          "unitPrice": 500,
+          "lineTotal": 1000
+        }
       ],
       "subtotal": 2500,
       "vatAmount": 250,
@@ -101,6 +201,48 @@
       "status": "Approved",
       "memo": "",
       "attachment": ""
+    },
+    {
+      "id": "0a35",
+      "supplier": "Gamma Distributors",
+      "warehouse": "Khulna Warehouse",
+      "shippingAddress": "Eum velit excepteur ",
+      "vatRate": "15",
+      "orderDate": "1984-12-28",
+      "items": [
+        {
+          "product": "Product A",
+          "quantity": 11,
+          "unitPrice": 80,
+          "lineTotal": 0
+        }
+      ],
+      "notes": "Proident quas magna",
+      "attachment": "",
+      "subtotal": 880,
+      "vatAmount": 132,
+      "grandTotal": 1012
+    },
+    {
+      "id": "ad36",
+      "supplier": "Alpha Ltd",
+      "warehouse": "Sylhet Warehouse",
+      "shippingAddress": "Explicabo Qui volup",
+      "vatRate": "15",
+      "orderDate": "1989-01-04",
+      "items": [
+        {
+          "productId": "4",
+          "quantity": 86,
+          "unitPrice": 120,
+          "lineTotal": 10320
+        }
+      ],
+      "notes": "Aute cupiditate labo",
+      "attachment": "",
+      "subtotal": 10320,
+      "vatAmount": 1548,
+      "grandTotal": 11868
     }
   ]
 }

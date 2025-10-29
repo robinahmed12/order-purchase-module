@@ -1,33 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-
-import { Router } from '@angular/router';
-import { map, startWith } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, importProvidersFrom, OnInit } from '@angular/core';
 import { PurchaseOrderService } from '../services/purchase-order.service';
+import { Router } from '@angular/router';
+import { combineLatest, Observable, startWith } from 'rxjs';
+import { Product, Supplier, VatRate, Warehouse } from '../Models/po.interface';
+
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-purchase-order-form',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './purchase-order-form.html',
   styleUrl: './purchase-order-form.css',
 })
 export class PurchaseOrderForm implements OnInit {
   poForm!: FormGroup;
+
+  suppliers$!: Observable<Supplier[]>;
+  warehouses$!: Observable<Warehouse[]>;
+  products$!: Observable<Product[]>;
+  vatRates$!: Observable<VatRate[]>;
+
   constructor(
     private fb: FormBuilder,
     private poService: PurchaseOrderService,
-    private router: Router
+    public router: Router
   ) {}
 
-  suppliers$ = this.poService.getSuppliers();
-  warehouses$ = this.poService.getWarehouses();
-  products$ = this.poService.getProducts();
-  vatRates$ = this.poService.getVatRates();
-
   ngOnInit() {
+    this.suppliers$ = this.poService.getSuppliers();
+    this.warehouses$ = this.poService.getWarehouses();
+    this.products$ = this.poService.getProducts();
+    this.vatRates$ = this.poService.getVatRates();
+
     this.poForm = this.fb.group({
       supplier: ['', Validators.required],
       warehouse: ['', Validators.required],
@@ -37,9 +43,12 @@ export class PurchaseOrderForm implements OnInit {
       items: this.fb.array([]),
       notes: [''],
       attachment: [''],
+      subtotal: [0],
+      vatAmount: [0],
+      grandTotal: [0],
     });
 
-    this.addItem(); // At least one product by default
+    this.addItem();
 
     // Recalculate totals whenever items or VAT change
     combineLatest([
@@ -60,6 +69,15 @@ export class PurchaseOrderForm implements OnInit {
       lineTotal: [0],
     });
     this.items.push(item);
+
+    item.valueChanges.subscribe((val) => {
+      const quantity = val.quantity || 0;
+      const unitPrice = val.unitPrice || 0;
+      const lineTotal = quantity * unitPrice;
+
+      item.patchValue({ lineTotal }, { emitEvent: false });
+      this.calculateTotals();
+    });
   }
 
   removeItem(index: number) {
@@ -70,20 +88,52 @@ export class PurchaseOrderForm implements OnInit {
   calculateTotals() {
     const items = this.items.value;
     const subtotal = items.reduce((sum: number, i: any) => sum + i.quantity * i.unitPrice, 0);
+    console.log(subtotal);
+
     const vatRate = this.poForm.get('vatRate')?.value || 0;
+    console.log(vatRate);
     const vatAmount = (subtotal * vatRate) / 100;
+
+    console.log(vatAmount);
     const grandTotal = subtotal + vatAmount;
+    console.log(grandTotal);
 
     this.poForm.patchValue({ subtotal, vatAmount, grandTotal }, { emitEvent: false });
   }
 
+  onProductChange(index: number) {
+    const item = this.items.at(index);
+    const productId = item.get('product')!.value;
+
+    this.products$.subscribe((products) => {
+      const selected = products.find((p) => p.id === productId);
+      if (selected) {
+        const quantity = item.get('quantity')!.value || 1;
+        const unitPrice = selected.price;
+        const lineTotal = quantity * unitPrice;
+
+        item.patchValue({ unitPrice, lineTotal });
+        this.calculateTotals();
+      }
+    });
+  }
+
   onSubmit() {
-    if (this.poForm.invalid || this.items.length === 0) {
-      alert('Please fill all required fields and add at least one item.');
-      return;
-    }
-    this.poService.createOrder(this.poForm.value).subscribe(() => {
-      alert('Purchase Order saved!');
+    if (this.poForm.invalid) return;
+
+    const formValue = this.poForm.value;
+    const payload = {
+      ...formValue,
+      items: formValue.items.map((item: any) => ({
+        productId: item.product,
+        quantity: item.quantity,
+        unitPrice: item.unitPrice,
+        lineTotal: item.lineTotal,
+      })),
+    };
+    console.log(payload);
+
+    this.poService.createOrder(payload).subscribe(() => {
       this.router.navigate(['/purchase-orders']);
     });
   }

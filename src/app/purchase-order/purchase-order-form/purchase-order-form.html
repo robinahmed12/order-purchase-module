@@ -1,89 +1,204 @@
-<div class="container py-4">
-  <h3>Create Purchase Order</h3>
+<div class="container mt-8 mx-auto py-6 px-4 max-w-7xl">
+  <h3 class="text-2xl font-bold text-white mb-6">Create Purchase Order</h3>
 
-  <form [formGroup]="poForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="poForm" (ngSubmit)="onSubmit()" class="bg-white rounded-lg shadow-lg p-6">
     <!-- Header -->
-    <div class="row g-3 mb-3">
-      <div class="col-md-4">
-        <label>Supplier</label>
-        <select class="form-select" formControlName="supplier">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Supplier</label>
+        <select
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          formControlName="supplier"
+        >
           <option value="">Select</option>
-          <option *ngFor="let s of suppliers$ | async" [value]="s.name">{{ s.name }}</option>
+          @for (s of suppliers$ | async; track s.name) {
+          <option [value]="s.name">{{ s.name }}</option>
+          }
         </select>
       </div>
-      <div class="col-md-4">
-        <label>Warehouse</label>
-        <select class="form-select" formControlName="warehouse">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Warehouse</label>
+        <select
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          formControlName="warehouse"
+        >
           <option value="">Select</option>
-          <option *ngFor="let w of warehouses$ | async" [value]="w.name">{{ w.name }}</option>
+          @for (w of warehouses$ | async; track w.name) {
+          <option [value]="w.name">{{ w.name }}</option>
+          }
         </select>
       </div>
-      <div class="col-md-4">
-        <label>Order Date</label>
-        <input type="date" class="form-control" formControlName="orderDate" />
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Order Date</label>
+        <input
+          type="date"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          formControlName="orderDate"
+        />
       </div>
     </div>
 
-    <div class="mb-3">
-      <label>Shipping Address</label>
-      <textarea class="form-control" formControlName="shippingAddress"></textarea>
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Shipping Address</label>
+      <textarea
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        formControlName="shippingAddress"
+        rows="3"
+      ></textarea>
     </div>
 
-    <div class="mb-3 col-md-3">
-      <label>VAT Rate (%)</label>
-      <select class="form-select" formControlName="vatRate">
+    <div class="mb-6 max-w-xs">
+      <label class="block text-sm font-medium text-gray-700 mb-2">VAT Rate (%)</label>
+      <select
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        formControlName="vatRate"
+      >
         <option value="">Select</option>
-        <option *ngFor="let v of vatRates$ | async" [value]="v.rate">{{ v.rate }}%</option>
+        @for (v of vatRates$ | async; track v.rate) {
+        <option [value]="v.rate">{{ v.rate }}%</option>
+        }
       </select>
     </div>
 
     <!-- Items Table -->
-    <h5>Items</h5>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th><th>Action</th>
-        </tr>
-      </thead>
-      <tbody formArrayName="items">
-        <tr *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-          <td>
-            <select class="form-select" formControlName="product">
-              <option value="">Select</option>
-              <option *ngFor="let p of products$ | async" [value]="p.name">{{ p.name }}</option>
-            </select>
-          </td>
-          <td><input type="number" formControlName="quantity" class="form-control" (input)="calculateTotals()" /></td>
-          <td><input type="number" formControlName="unitPrice" class="form-control" (input)="calculateTotals()" /></td>
-          <td>{{ item.value.quantity * item.value.unitPrice }}</td>
-          <td><button class="btn btn-sm btn-danger" (click)="removeItem(i)" type="button">X</button></td>
-        </tr>
-      </tbody>
-    </table>
-    <button class="btn btn-primary btn-sm" type="button" (click)="addItem()">+ Add Item</button>
+    <h5 class="text-xl font-semibold text-gray-800 mb-4">Items</h5>
+    <div class="overflow-x-auto mb-4">
+      <table class="min-w-full border border-gray-300">
+        <thead class="bg-[#166534]">
+          <tr>
+            <th
+              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
+            >
+              Product
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
+            >
+              Qty
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
+            >
+              Unit Price
+            </th>
+            <th
+              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
+            >
+              Total
+            </th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Action</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="items">
+          @for (item of items.controls; track $index; let i = $index) {
+          <tr [formGroupName]="i" class="border-b border-gray-300 hover:bg-gray-50">
+            <td class="px-4 py-3 border-r border-gray-300">
+              <select
+                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                formControlName="product"
+                (change)="onProductChange(i)"
+              >
+                <option value="">Select</option>
+                @for (p of products$ | async; track p.name) {
+                <option [value]="p.id">{{ p.name }}</option>
+                }
+              </select>
+            </td>
+            <td class="px-4 py-3 border-r border-gray-300">
+              <input
+                type="number"
+                formControlName="quantity"
+                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                (input)="calculateTotals()"
+              />
+            </td>
+            <td class="px-4 py-3 border-r border-gray-300">
+              <input
+                type="number"
+                formControlName="unitPrice"
+                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
+                [readonly]="true"
+              />
+            </td>
+            <td class="px-4 py-3 border-r border-gray-300">
+              <span class="font-medium">{{ item.value.lineTotal | number:'1.2-2' }}</span>
+            </td>
+            <td class="px-4 py-3">
+              <button
+                class="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors"
+                (click)="removeItem(i)"
+                type="button"
+              >
+                X
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <button
+      class="px-4 py-2 bg-[#22C55E] text-white text-sm font-medium rounded hover:bg-[#16A34A] transition-colors"
+      type="button"
+      (click)="addItem()"
+    >
+      + Add Item
+    </button>
 
     <!-- Summary -->
-    <div class="mt-4">
-      <p><strong>Subtotal:</strong> {{ poForm.value.subtotal || 0 }}</p>
-      <p><strong>VAT:</strong> {{ poForm.value.vatAmount || 0 }}</p>
-      <p><strong>Grand Total:</strong> {{ poForm.value.grandTotal || 0 }}</p>
+    <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <div class="space-y-2">
+        <p class="flex justify-between text-gray-700">
+          <span class="font-medium">Subtotal:</span>
+          <span class="font-semibold">{{ poForm.value.subtotal || 0 }}</span>
+        </p>
+        <p class="flex justify-between text-gray-700">
+          <span class="font-medium">VAT:</span>
+          <span class="font-semibold">{{ poForm.value.vatAmount || 0 }}</span>
+        </p>
+        <p class="flex justify-between text-lg text-gray-900 border-t border-gray-300 pt-2">
+          <span class="font-bold">Grand Total:</span>
+          <span class="font-bold">{{ poForm.value.grandTotal || 0 }}</span>
+        </p>
+      </div>
     </div>
 
     <!-- Notes & Attach -->
-    <div class="mb-3">
-      <label>Memo / Notes</label>
-      <textarea class="form-control" formControlName="notes"></textarea>
+    <div class="mt-6 mb-4">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Memo / Notes</label>
+      <textarea
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        formControlName="notes"
+        rows="4"
+      ></textarea>
     </div>
-    <div class="mb-3">
-      <label>Attachment</label>
-      <input type="file" class="form-control" (change)="onFileChange($event)" />
+
+    <div class="mb-6">
+      <label class="block text-sm font-medium text-gray-700 mb-2">Attachment</label>
+      <input
+        type="file"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#166534] file:text-white hover:file:bg-[#16A34A] file:cursor-pointer"
+        (change)="onFileChange($event)"
+      />
     </div>
 
     <!-- Buttons -->
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-success">Save</button>
-      <button type="button" class="btn btn-secondary" (click)="router.navigate(['/purchase-orders'])">Cancel</button>
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        class="px-6 py-2 bg-[#22C55E] text-white font-medium rounded-md hover:bg-[#16A34A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:ring-offset-2"
+      >
+        Save
+      </button>
+      <button
+        type="button"
+        class="px-6 py-2 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+      >
+        Cancel
+      </button>
     </div>
   </form>
 </div>
-
