@@ -4,17 +4,12 @@ import { TableFilter } from './table-filter.model';
 
 @Injectable({ providedIn: 'root' })
 export class TableFilterService<T extends Record<string, any>> {
-  getFilters() {
-    throw new Error('Method not implemented.');
-  }
   private originalData: T[] = [];
   private filters$ = new BehaviorSubject<TableFilter>({
     searchTerm: '',
     status: 'All',
     startDate: null,
     endDate: null,
-    sortKey: '',
-    sortDirection: '',
     page: 1,
     pageSize: 10,
   });
@@ -32,6 +27,7 @@ export class TableFilterService<T extends Record<string, any>> {
       map((f) => {
         let data = [...this.originalData];
 
+        //search functionality
         if (f.searchTerm?.trim()) {
           const term = f.searchTerm.toLowerCase();
           data = data.filter(
@@ -42,10 +38,12 @@ export class TableFilterService<T extends Record<string, any>> {
           );
         }
 
+        // status filtering
         if (f.status && f.status !== 'All') {
           data = data.filter((item) => item['status'] === f.status);
         }
 
+        // date filtering
         if (f.startDate && f.endDate) {
           const start = new Date(f.startDate);
           const end = new Date(f.endDate);
@@ -55,6 +53,7 @@ export class TableFilterService<T extends Record<string, any>> {
           });
         }
 
+        // implementing sorting on column
         if (f.sortKey) {
           data.sort((a, b) => {
             const aVal = a[f.sortKey!];
@@ -64,6 +63,7 @@ export class TableFilterService<T extends Record<string, any>> {
           });
         }
 
+        // 
         const startIdx = ((f.page || 1) - 1) * (f.pageSize || 10);
         return data.slice(startIdx, startIdx + (f.pageSize || 10));
       })

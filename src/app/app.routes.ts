@@ -7,4 +7,7 @@ export const routes: Routes = [
   { path: '', component: Home },
   { path: 'order-list', component: PurchaseOrderList },
   { path: 'add-order', component: PurchaseOrderForm },
+  {
+    path: "add-order/edit/:id", component: PurchaseOrderForm
+  }
 ];

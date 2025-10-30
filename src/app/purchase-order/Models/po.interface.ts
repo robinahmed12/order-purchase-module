@@ -1,53 +1,44 @@
-
-export interface PurchaseOrder {
-  id: number;
-  poNumber: string;
-  supplier: string;
-  warehouse: string;
-  orderDate: string;
-  totalAmount: number;
-}
-
 export interface Supplier {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Warehouse {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   price: number;
 }
 
 export interface VatRate {
-  id: number;
+  id: string;
   rate: number;
 }
 
-export interface PurchaseOrderItem {
-  poNumber: any;
-  productId: number;
-  quantity: number;
-  price: number;
-}
-
-export interface PurchaseOrderItem {
-  id: number;
-  poNumber: any;
-  supplier: string;
-  warehouse: string;
+export interface PurchaseOrderDetails {
+  id: string;
+  poNumber: string;
+  supplier: Supplier;
+  warehouse: Warehouse;
   shippingAddress: string;
-  vatRate: number;
+  vatRate: VatRate;
   orderDate: string;
-  items: PurchaseOrderItem[];
+  items: orderedItem[];
   subtotal: number;
   vatAmount: number;
   grandTotal: number;
   status: 'Draft' | 'Approved' | 'Received';
   notes?: string;
+  attachment?:string
+}
+
+export interface orderedItem {
+  productId: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
 }

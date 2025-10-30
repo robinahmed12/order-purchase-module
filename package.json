@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
    "start": "concurrently \"npm run start:app\" \"npm run start:server\"",
+     "prestart:app": "set TAILWIND_DISABLE_OXIDE=1",
   "start:app": "ng serve --open",
   "start:server": "json-server --watch db.json --port 3000",
     "build": "ng build",

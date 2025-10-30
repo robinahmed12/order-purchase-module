@@ -119,9 +119,19 @@
               <div class="flex justify-center gap-2">
                 <button class="text-[#22C55E] hover:text-[#16A34A]" title="View">View</button>
                 <span class="text-gray-300">|</span>
-                <button class="text-[#22C55E] hover:text-[#16A34A]" title="Edit">Edit</button>
+                <button
+                  (click)="onEdit(order.id)"
+                  class="text-[#22C55E] hover:text-[#16A34A]"
+                  title="Edit"
+                >
+                  Edit
+                </button>
                 <span class="text-gray-300">|</span>
-                <button class="text-red-600 hover:text-red-800" title="Delete">Delete</button>
+                <button
+                  (click)="handleDelete(order.id)"
+                 class="text-red-600 hover:text-red-800" title="Delete">
+                 Delete
+                </button>
               </div>
             </td>
           </tr>
@@ -134,6 +144,8 @@
           }
         </tbody>
       </table>
+
+      
     </div>
 
     <!-- Pagination -->

@@ -1,7 +1,8 @@
+import { orderedItem, PurchaseOrderDetails } from './../Models/po.interface';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { PurchaseOrderService } from '../services/purchase-order.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, startWith } from 'rxjs';
 import { Product, Supplier, VatRate, Warehouse } from '../Models/po.interface';
 import { CommonModule } from '@angular/common';
@@ -14,6 +15,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './purchase-order-form.css',
 })
 export class PurchaseOrderForm implements OnInit {
+  isEditMode = false;
   poForm!: FormGroup;
   showSuccess = false;
 
@@ -23,11 +25,15 @@ export class PurchaseOrderForm implements OnInit {
   products$!: Observable<Product[]>;
   vatRates$!: Observable<VatRate[]>;
 
-  constructor(
-    private fb: FormBuilder,
-    private poService: PurchaseOrderService,
-    public router: Router
-  ) {}
+  // Injected services using Angular's functional DI
+  private poService = inject(PurchaseOrderService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  constructor(private fb: FormBuilder) // private poService: PurchaseOrderService,
+  // public router: Router,
+  // private route: ActivatedRoute
+  {}
 
   ngOnInit() {
     // Load dropdown data from service
@@ -36,20 +42,19 @@ export class PurchaseOrderForm implements OnInit {
     this.products$ = this.poService.getProducts();
     this.vatRates$ = this.poService.getVatRates();
 
-    // Initialize purchase order form
-    this.poForm = this.fb.group({
-      supplier: ['', Validators.required],
-      warehouse: ['', Validators.required],
-      shippingAddress: ['', Validators.required],
-      vatRate: [null, Validators.required],
-      orderDate: [new Date().toISOString().slice(0, 10), Validators.required],
-      items: this.fb.array([]), // form array for multiple items
-      notes: [''],
-      attachment: [''],
-      subtotal: [0],
-      vatAmount: [0],
-      grandTotal: [0],
-    });
+    const orderId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!orderId && orderId !== 'add';
+
+    // Initialize form
+    this.initForm();
+
+    if (this.isEditMode && orderId) {
+      this.poService.getOrderById(orderId).subscribe((order) => {
+        this.populateForm(order);
+      });
+    } else {
+      this.addItem(); // default item for new form
+    }
 
     // Add one default item initially
     this.addItem();
@@ -59,6 +64,22 @@ export class PurchaseOrderForm implements OnInit {
       this.poForm.get('items')!.valueChanges.pipe(startWith(this.items.value)),
       this.poForm.get('vatRate')!.valueChanges.pipe(startWith(this.poForm.get('vatRate')!.value)),
     ]).subscribe(() => this.calculateTotals());
+  }
+
+  initForm() {
+    this.poForm = this.fb.group({
+      supplier: ['', Validators.required],
+      warehouse: ['', Validators.required],
+      shippingAddress: ['', Validators.required],
+      vatRate: [null, Validators.required],
+      orderDate: ['', Validators.required],
+      items: this.fb.array([]),
+      notes: [''],
+      attachment: [''],
+      subtotal: [0],
+      vatAmount: [0],
+      grandTotal: [0],
+    });
   }
 
   // Getter for easy access to items FormArray
@@ -83,7 +104,7 @@ export class PurchaseOrderForm implements OnInit {
       const unitPrice = val.unitPrice || 0;
       const lineTotal = quantity * unitPrice;
 
-      item.patchValue({ lineTotal }, { emitEvent: false }); // avoid recursive triggers
+      item.patchValue({ lineTotal }, { emitEvent: false });
       this.calculateTotals();
     });
   }
@@ -125,6 +146,42 @@ export class PurchaseOrderForm implements OnInit {
     });
   }
 
+  // edit form
+  populateForm(order: PurchaseOrderDetails) {
+    this.poForm.patchValue({
+      supplier: order.supplier,
+      warehouse: order.warehouse,
+      shippingAddress: order.shippingAddress,
+      vatRate: order.vatRate,
+      orderDate: order.orderDate,
+      notes: order.notes,
+      attachment: order.attachment,
+    });
+
+    // Add items from order
+    order.items.forEach((item: orderedItem) => {
+      const itemGroup = this.fb.group({
+        product: [item.productId, Validators.required],
+        quantity: [item.quantity, [Validators.required, Validators.min(1)]],
+        unitPrice: [item.unitPrice, [Validators.required, Validators.min(1)]],
+        lineTotal: [item.lineTotal],
+      });
+
+      this.items.push(itemGroup);
+
+      // Subscribe to changes for recalculation
+      itemGroup.valueChanges.subscribe((val) => {
+        const quantity = val.quantity || 0;
+        const unitPrice = val.unitPrice || 0;
+        const lineTotal = quantity * unitPrice;
+        itemGroup.patchValue({ lineTotal }, { emitEvent: false });
+        this.calculateTotals();
+      });
+    });
+
+    this.calculateTotals();
+  }
+
   // Submit the form data to backend
   onSubmit() {
     if (this.poForm.invalid) {
@@ -133,9 +190,7 @@ export class PurchaseOrderForm implements OnInit {
     }
 
     const formValue = this.poForm.value;
-
-    // Prepare clean payload for backend
-    const payload = {
+    const purchaseOrderData = {
       ...formValue,
       items: formValue.items.map((item: any) => ({
         productId: item.product,
@@ -145,16 +200,21 @@ export class PurchaseOrderForm implements OnInit {
       })),
     };
 
-    // Call API to create order
-    this.poService.createOrder(payload).subscribe({
-      next: (data) => {
-        console.log('Order created:', data);
-        alert('Order submitted successfully');
-      },
-      error: (err) => {
-        console.error('Error creating order:', err);
-      },
-    });
+    if (this.isEditMode) {
+      const orderId = this.route.snapshot.paramMap.get('id');
+      this.poService.updateOrder(orderId!, purchaseOrderData).subscribe({
+        next: (data) => {
+          console.log(data);
+          alert('Order updated successfully');
+        },
+        error: (err) => console.error('Error updating order:', err),
+      });
+    } else {
+      this.poService.createOrder(purchaseOrderData).subscribe({
+        next: () => alert('Order submitted successfully'),
+        error: (err) => console.error('Error creating order:', err),
+      });
+    }
   }
 
   // Handle file input change (store file name)
