@@ -30,10 +30,9 @@ export class PurchaseOrderForm implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  constructor(private fb: FormBuilder) // private poService: PurchaseOrderService,
-  // public router: Router,
-  // private route: ActivatedRoute
-  {}
+  constructor(
+    private fb: FormBuilder // private poService: PurchaseOrderService, // public router: Router, // private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     // Load dropdown data from service
