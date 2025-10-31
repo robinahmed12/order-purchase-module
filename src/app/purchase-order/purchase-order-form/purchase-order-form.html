@@ -204,12 +204,8 @@
 
     <!-- Buttons -->
     <div class="flex gap-3">
-      <button
-        [disabled]="poForm.invalid"
-        type="submit"
-        class="px-6 py-2 bg-[#22C55E] text-white font-medium rounded-md hover:bg-[#16A34A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:ring-offset-2"
-      >
-        Save
+      <button type="submit" class="btn btn-primary">
+        {{ isEditMode ? 'Update Order' : 'Save Order' }}
       </button>
       <button
         type="button"

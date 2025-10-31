@@ -1,4 +1,3 @@
-// src/app/shared/table-filter.service.ts
 import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
@@ -22,8 +21,10 @@ export interface TableFilters {
 
 @Injectable({ providedIn: 'root' })
 export class TableFilterService<T extends Record<string, any>> {
+  // Full dataset (unfiltered)
   private allData: T[] = [];
 
+  // Reactive filter state
   private filters$ = new BehaviorSubject<TableFilters>({
     searchTerm: '',
     status: 'All',
@@ -35,46 +36,46 @@ export class TableFilterService<T extends Record<string, any>> {
     pageSize: 10,
   });
 
+  // Reactive data stream (raw input)
   private data$ = new BehaviorSubject<T[]>([]);
 
-  constructor() {
-    this.filteredData$ = combineLatest([this.data$, this.filters$]).pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      map(([data, filters]) => this.applyFilters(data, filters)),
-      shareReplay(1)
-    );
+  // Final filtered + paginated output stream
+  filteredData$ = combineLatest([this.data$, this.filters$]).pipe(
+    debounceTime(150), // debounce for smoother UX
+    distinctUntilChanged(), // prevent unnecessary recalculations
+    map(([data, filters]) => this.applyFilters(data, filters)),
+    shareReplay(1) // cache latest result for subscribers
+  );
 
-    this.totalCount$ = this.filteredData$.pipe(map((data) => data.length));
-  }
+  // Total count of raw data (used for pagination UI)
+  totalCount$ = this.data$.pipe(map((data) => data.length));
 
-  filteredData$;
-  totalCount$;
-
-  /** set initial data */
+  /**  Set initial dataset or refresh after create/update/delete */
   setData(data: T[]) {
     this.allData = data;
     this.data$.next(data);
   }
 
-  /** update filters reactively */
+  /**  Update filters reactively (search, sort, pagination, etc.) */
   updateFilters(partial: Partial<TableFilters>) {
     this.filters$.next({ ...this.filters$.value, ...partial });
   }
 
-  /** expose observables */
+  /**  Get filtered and paginated data stream */
   getFilteredData() {
     return this.filteredData$;
   }
+
+  /** Get total count of raw data */
   getTotalCount() {
     return this.totalCount$;
   }
 
-  /** core filtering logic */
+  /**  Apply all filters and pagination logic */
   private applyFilters(data: T[], filters: TableFilters): T[] {
     let filtered = [...data];
 
-    // search
+    //  Text search across key fields
     if (filters.searchTerm) {
       const term = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -85,12 +86,12 @@ export class TableFilterService<T extends Record<string, any>> {
       );
     }
 
-    // status
+    //  Status filter
     if (filters.status !== 'All') {
       filtered = filtered.filter((x) => x['status'] === filters.status);
     }
 
-    // date range
+    //  Date range filter
     if (filters.startDate && filters.endDate) {
       const start = new Date(filters.startDate).getTime();
       const end = new Date(filters.endDate).getTime();
@@ -100,19 +101,36 @@ export class TableFilterService<T extends Record<string, any>> {
       });
     }
 
-    // sorting
+    //  Sorting
     if (filters.sortKey) {
       filtered.sort((a, b) => {
         const aVal = a[filters.sortKey];
         const bVal = b[filters.sortKey];
+        if (aVal === bVal) return 0;
         return filters.sortDirection === 'asc' ? (aVal > bVal ? 1 : -1) : aVal < bVal ? 1 : -1;
       });
     }
 
-    // pagination
+    //  Pagination
     const startIdx = (filters.page - 1) * filters.pageSize;
     const endIdx = startIdx + filters.pageSize;
-
     return filtered.slice(startIdx, endIdx);
+  }
+
+  // query params sync
+  getFilters(): TableFilters {
+    return this.filters$.value;
+  }
+
+  setFiltersFromQuery(params: Partial<TableFilters>) {
+    const current = this.filters$.value;
+    const merged: TableFilters = {
+      ...current,
+      ...params,
+      page: Number(params.page) || 1,
+      pageSize: Number(params.pageSize) || 10,
+      sortDirection: params.sortDirection === 'desc' ? 'desc' : 'asc',
+    };
+    this.filters$.next(merged);
   }
 }

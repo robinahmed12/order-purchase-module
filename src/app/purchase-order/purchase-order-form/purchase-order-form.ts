@@ -39,13 +39,14 @@ export class PurchaseOrderForm implements OnInit {
     this.products$ = this.poService.getProducts();
     this.vatRates$ = this.poService.getVatRates();
 
-    const orderId = this.route.snapshot.paramMap.get('id');
-    this.isEditMode = !!orderId && orderId !== 'add';
-
     // Initialize form
     this.initForm();
 
-    if (this.isEditMode && orderId) {
+    const orderIdParam = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!orderIdParam && orderIdParam !== 'add';
+
+    if (this.isEditMode && orderIdParam) {
+      const orderId = orderIdParam!;
       this.poService.getOrderById(orderId).subscribe((order) => {
         this.populateForm(order);
       });
@@ -197,18 +198,27 @@ export class PurchaseOrderForm implements OnInit {
       })),
     };
 
+    const orderIdParam = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!orderIdParam && orderIdParam !== 'add';
+
     if (this.isEditMode) {
       const orderId = String(this.route.snapshot.paramMap.get('id'));
+      console.log(orderId);
       this.poService.updateOrder(orderId, purchaseOrderData).subscribe({
         next: (data) => {
-          console.log(data);
+          console.log('Updated:', data);
           alert('Order updated successfully');
+          this.router.navigate(['/order-list']);
         },
         error: (err) => console.error('Error updating order:', err),
       });
     } else {
       this.poService.createOrder(purchaseOrderData).subscribe({
-        next: () => alert('Order submitted successfully'),
+        next: () => {
+          // this.poService.loadOrders();
+          alert('Order submitted successfully');
+        },
+
         error: (err) => console.error('Error creating order:', err),
       });
     }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, TemplateRef } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
@@ -6,11 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { TableFilterService } from '../../shared/table-filter.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { PurchaseOrderDetails } from '../Models/po.interface';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-purchase-order-list',
-  imports: [AsyncPipe, FormsModule, PaginationModule, DatePipe, CommonModule],
+  imports: [AsyncPipe, FormsModule, PaginationModule, DatePipe, CommonModule, RouterLink],
   providers: [],
   templateUrl: './purchase-order-list.html',
   styleUrl: './purchase-order-list.css',
@@ -25,64 +25,85 @@ export class PurchaseOrderList implements OnInit {
   endDate: string | null = null;
 
   private poService = inject(PurchaseOrderService);
-  private tableHelper = inject(TableFilterService<PurchaseOrderDetails>);
+  private tableFilterService = inject(TableFilterService<PurchaseOrderDetails>);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   ngOnInit() {
     this.poService.getAllOrders().subscribe((orders) => {
-      this.tableHelper.setData(orders);
+      this.tableFilterService.setData(orders);
     });
 
-    this.orders$ = this.tableHelper.getFilteredData();
-    this.totalCount$ = this.tableHelper.getTotalCount();
+    // Bind filtered/paginated data
+    this.orders$ = this.tableFilterService.getFilteredData();
+    this.totalCount$ = this.tableFilterService.getTotalCount();
 
-     // Subscribe to reactive order stream from service (BehaviorSubject)
-    // this.orders$ = this.poService.orders$;
-    // this.poService.loadOrders(); 
+    //
+    this.route.queryParams.subscribe((params) => {
+      this.tableFilterService.setFiltersFromQuery(params);
+    });
   }
 
   onSearch(term: string) {
-    this.tableHelper.updateFilters({ searchTerm: term, page: 1 });
+    this.tableFilterService.updateFilters({ searchTerm: term, page: 1 });
+    this.syncQueryParams();
   }
 
   onStatusChange(value: string) {
-    this.tableHelper.updateFilters({ status: value, page: 1 });
+    this.tableFilterService.updateFilters({ status: value, page: 1 });
+    this.syncQueryParams();
   }
 
   onDateRange() {
-    this.tableHelper.updateFilters({
+    this.tableFilterService.updateFilters({
       startDate: this.startDate ?? '',
       endDate: this.endDate ?? '',
       page: 1,
     });
+    this.syncQueryParams();
   }
 
   onSort(key: keyof PurchaseOrderDetails) {
-    const current = (this.tableHelper as any)['filters$'].value;
+    const current = (this.tableFilterService as any)['filters$'].value;
     const dir = current.sortKey === key && current.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.tableHelper.updateFilters({ sortKey: key, sortDirection: dir });
+    this.tableFilterService.updateFilters({ sortKey: key, sortDirection: dir });
+    this.syncQueryParams();
   }
 
-  currentPage = 1; // bind to ngModel
+  currentPage = 1;
 
-onPageChange(event: any) {
-  this.currentPage = event.page;
-  this.tableHelper.updateFilters({ page: this.currentPage });
-}
+  onPageChange(event: any) {
+    this.tableFilterService.updateFilters({ page: event.page });
+    this.syncQueryParams();
+  }
+
+  // query params sync method
+  syncQueryParams() {
+    const filters = this.tableFilterService.getFilters();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: filters,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  // order edit method
 
   onEdit(id: string) {
-    this.router.navigate(['/add-order/edit', id]);
+    this.router.navigate(['purchase-orders/add-order/edit', id]);
   }
- //  Delete handler with reactive refresh
+
+  // order delete method
   handleDelete(id: string) {
-    console.log('Deleting order:', id);
-    this.poService.deleteOrder(id).subscribe({
-      next: () => {
-        console.log('Order deleted successfully');
-      },
-      error: (error) => {
-        console.error('Delete failed:', error);
-      },
-    });
+    if (confirm('Are you sure you want to delete this order?')) {
+      this.poService.deleteOrder(id).subscribe({
+        next: () => {
+          this.poService.getAllOrders().subscribe((orders) => {
+            this.tableFilterService.setData(orders);
+          });
+        },
+        error: (error) => console.error('Delete failed:', error),
+      });
+    }
   }
 }
