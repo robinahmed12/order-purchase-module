@@ -87,139 +87,430 @@
   ],
   "purchaseOrders": [
     {
-      "id": "970",
-      "supplier": "Gamma Distributors",
+      "id": "po-001",
+      "poNumber": "PO-001",
+      "supplier": "Alpha Ltd",
       "warehouse": "Dhaka Warehouse",
-      "shippingAddress": "Harum consectetur vo",
-      "vatRate": "15",
-      "orderDate": "2000-07-24",
+      "shippingAddress": "House 10, Road 3, Dhanmondi, Dhaka",
+      "vatRate": 10,
+      "orderDate": "2024-01-12",
+      "items": [
+        {
+          "productId": "1",
+          "quantity": 10,
+          "unitPrice": 100,
+          "lineTotal": 1000
+        },
+        {
+          "productId": "2",
+          "quantity": 5,
+          "unitPrice": 200,
+          "lineTotal": 1000
+        }
+      ],
+      "notes": "Urgent requirement",
+      "attachment": "",
+      "subtotal": 2000,
+      "vatAmount": 200,
+      "grandTotal": 2200,
+      "status": "Approved"
+    },
+    {
+      "id": "po-002",
+      "poNumber": "PO-002",
+      "supplier": "Beta Traders",
+      "warehouse": "Chittagong Warehouse",
+      "shippingAddress": "Agrabad, Chittagong",
+      "vatRate": 5,
+      "orderDate": "2024-02-20",
       "items": [
         {
           "productId": "3",
-          "quantity": 41,
+          "quantity": 4,
           "unitPrice": 350,
-          "lineTotal": 14350
+          "lineTotal": 1400
+        },
+        {
+          "productId": "6",
+          "quantity": 2,
+          "unitPrice": 800,
+          "lineTotal": 1600
+        }
+      ],
+      "notes": "Partial delivery accepted",
+      "attachment": "",
+      "subtotal": 3000,
+      "vatAmount": 150,
+      "grandTotal": 3150,
+      "status": "Received"
+    },
+    {
+      "id": "po-003",
+      "poNumber": "PO-003",
+      "supplier": "Gamma Distributors",
+      "warehouse": "Khulna Warehouse",
+      "shippingAddress": "Sonadanga, Khulna",
+      "vatRate": 15,
+      "orderDate": "2024-03-10",
+      "items": [
+        {
+          "productId": "5",
+          "quantity": 8,
+          "unitPrice": 500,
+          "lineTotal": 4000
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 4000,
+      "vatAmount": 600,
+      "grandTotal": 4600,
+      "status": "Draft"
+    },
+    {
+      "id": "po-004",
+      "poNumber": "PO-004",
+      "supplier": "Delta Supplies",
+      "warehouse": "Sylhet Warehouse",
+      "shippingAddress": "Zindabazar, Sylhet",
+      "vatRate": 10,
+      "orderDate": "2024-03-25",
+      "items": [
+        {
+          "productId": "4",
+          "quantity": 20,
+          "unitPrice": 120,
+          "lineTotal": 2400
         },
         {
           "productId": "1",
-          "quantity": 95,
+          "quantity": 10,
           "unitPrice": 100,
-          "lineTotal": 9500
+          "lineTotal": 1000
         }
       ],
-      "notes": "Aspernatur eligendi ",
+      "notes": "Deliver before end of month",
       "attachment": "",
-      "subtotal": 23850,
-      "vatAmount": 3577.5,
-      "grandTotal": 27427.5
+      "subtotal": 3400,
+      "vatAmount": 340,
+      "grandTotal": 3740,
+      "status": "Approved"
     },
     {
-      "id": "2056",
-      "supplier": "Gamma Distributors",
-      "warehouse": "Chittagong Warehouse",
-      "shippingAddress": "Non praesentium comm",
-      "vatRate": "15",
-      "orderDate": "1993-03-15",
-      "items": [
-        {
-          "productId": "5",
-          "quantity": 53,
-          "unitPrice": 500,
-          "lineTotal": 26500
-        },
-        {
-          "productId": "5",
-          "quantity": 66,
-          "unitPrice": 500,
-          "lineTotal": 33000
-        }
-      ],
-      "notes": "Dolor perferendis si",
-      "attachment": "",
-      "subtotal": 59500,
-      "vatAmount": 8925,
-      "grandTotal": 68425
-    },
-    {
-      "id": "ec19",
-      "supplier": "Alpha Ltd",
-      "warehouse": "Sylhet Warehouse",
-      "shippingAddress": "Fugiat quia quidem q",
-      "vatRate": "5",
-      "orderDate": "1973-03-17",
-      "items": [
-        {
-          "productId": "6",
-          "quantity": 1,
-          "unitPrice": 800,
-          "lineTotal": 800
-        },
-        {
-          "productId": "3",
-          "quantity": 31,
-          "unitPrice": 350,
-          "lineTotal": 10850
-        }
-      ],
-      "notes": "Reiciendis quos ut o",
-      "attachment": "",
-      "subtotal": 11650,
-      "vatAmount": 582.5,
-      "grandTotal": 12232.5
-    },
-    {
-      "id": "a02e",
-      "supplier": "Delta Supplies",
-      "warehouse": "Sylhet Warehouse",
-      "shippingAddress": "Distinctio Qui plac",
-      "vatRate": "15",
-      "orderDate": "2022-10-21",
-      "items": [
-        {
-          "productId": "3",
-          "quantity": 64,
-          "unitPrice": 350,
-          "lineTotal": 22400
-        },
-        {
-          "productId": "6",
-          "quantity": 96,
-          "unitPrice": 800,
-          "lineTotal": 76800
-        }
-      ],
-      "notes": "Est iure impedit a",
-      "attachment": "",
-      "subtotal": 99200,
-      "vatAmount": 14880,
-      "grandTotal": 114080
-    },
-    {
-      "id": "3ca4",
+      "id": "po-005",
+      "poNumber": "PO-005",
       "supplier": "Orion Imports",
+      "warehouse": "Dhaka Warehouse",
+      "shippingAddress": "Gulshan-2, Dhaka",
+      "vatRate": 5,
+      "orderDate": "2024-04-15",
+      "items": [
+        {
+          "productId": "2",
+          "quantity": 6,
+          "unitPrice": 200,
+          "lineTotal": 1200
+        },
+        {
+          "productId": "3",
+          "quantity": 2,
+          "unitPrice": 350,
+          "lineTotal": 700
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 1900,
+      "vatAmount": 95,
+      "grandTotal": 1995,
+      "status": "Received"
+    },
+    {
+      "id": "po-006",
+      "poNumber": "PO-006",
+      "supplier": "Alpha Ltd",
+      "warehouse": "Chittagong Warehouse",
+      "shippingAddress": "Nasirabad, Chittagong",
+      "vatRate": 15,
+      "orderDate": "2024-05-10",
+      "items": [
+        {
+          "productId": "6",
+          "quantity": 5,
+          "unitPrice": 800,
+          "lineTotal": 4000
+        }
+      ],
+      "notes": "For Q2 operations",
+      "attachment": "",
+      "subtotal": 4000,
+      "vatAmount": 600,
+      "grandTotal": 4600,
+      "status": "Approved"
+    },
+    {
+      "id": "po-007",
+      "poNumber": "PO-007",
+      "supplier": "Beta Traders",
+      "warehouse": "Sylhet Warehouse",
+      "shippingAddress": "Amberkhana, Sylhet",
+      "vatRate": 10,
+      "orderDate": "2024-05-22",
+      "items": [
+        {
+          "productId": "1",
+          "quantity": 15,
+          "unitPrice": 100,
+          "lineTotal": 1500
+        },
+        {
+          "productId": "4",
+          "quantity": 10,
+          "unitPrice": 120,
+          "lineTotal": 1200
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 2700,
+      "vatAmount": 270,
+      "grandTotal": 2970,
+      "status": "Draft"
+    },
+    {
+      "id": "po-008",
+      "poNumber": "PO-008",
+      "supplier": "Gamma Distributors",
+      "warehouse": "Dhaka Warehouse",
+      "shippingAddress": "Tejgaon, Dhaka",
+      "vatRate": 5,
+      "orderDate": "2024-06-01",
+      "items": [
+        {
+          "productId": "5",
+          "quantity": 12,
+          "unitPrice": 500,
+          "lineTotal": 6000
+        }
+      ],
+      "notes": "Include packing slip",
+      "attachment": "",
+      "subtotal": 6000,
+      "vatAmount": 300,
+      "grandTotal": 6300,
+      "status": "Approved"
+    },
+    {
+      "id": "po-009",
+      "poNumber": "PO-009",
+      "supplier": "Delta Supplies",
       "warehouse": "Khulna Warehouse",
-      "shippingAddress": "Est dignissimos ea ",
-      "vatRate": "10",
-      "orderDate": "2020-03-01",
+      "shippingAddress": "Boyra, Khulna",
+      "vatRate": 10,
+      "orderDate": "2024-07-10",
       "items": [
         {
           "productId": "3",
-          "quantity": 59,
+          "quantity": 6,
           "unitPrice": 350,
-          "lineTotal": 20650
+          "lineTotal": 2100
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 2100,
+      "vatAmount": 210,
+      "grandTotal": 2310,
+      "status": "Received"
+    },
+    {
+      "id": "po-010",
+      "poNumber": "PO-010",
+      "supplier": "Orion Imports",
+      "warehouse": "Sylhet Warehouse",
+      "shippingAddress": "Shibgonj, Sylhet",
+      "vatRate": 15,
+      "orderDate": "2024-08-05",
+      "items": [
+        {
+          "productId": "2",
+          "quantity": 20,
+          "unitPrice": 200,
+          "lineTotal": 4000
+        },
+        {
+          "productId": "4",
+          "quantity": 15,
+          "unitPrice": 120,
+          "lineTotal": 1800
+        }
+      ],
+      "notes": "Urgent stock refill",
+      "attachment": "",
+      "subtotal": 5800,
+      "vatAmount": 870,
+      "grandTotal": 6670,
+      "status": "Approved"
+    },
+    {
+      "id": "po-011",
+      "poNumber": "PO-011",
+      "supplier": "Alpha Ltd",
+      "warehouse": "Dhaka Warehouse",
+      "shippingAddress": "Uttara, Dhaka",
+      "vatRate": 5,
+      "orderDate": "2024-08-21",
+      "items": [
+        {
+          "productId": "6",
+          "quantity": 3,
+          "unitPrice": 800,
+          "lineTotal": 2400
         },
         {
           "productId": "5",
-          "quantity": 21,
+          "quantity": 2,
           "unitPrice": 500,
-          "lineTotal": 10500
+          "lineTotal": 1000
         }
       ],
-      "notes": "Eveniet consequatur",
+      "notes": "",
       "attachment": "",
-      "subtotal": 31150,
-      "vatAmount": 3115,
-      "grandTotal": 34265
+      "subtotal": 3400,
+      "vatAmount": 170,
+      "grandTotal": 3570,
+      "status": "Draft"
+    },
+    {
+      "id": "po-012",
+      "poNumber": "PO-012",
+      "supplier": "Beta Traders",
+      "warehouse": "Chittagong Warehouse",
+      "shippingAddress": "Pahartali, Chittagong",
+      "vatRate": 10,
+      "orderDate": "2024-09-10",
+      "items": [
+        {
+          "productId": "1",
+          "quantity": 10,
+          "unitPrice": 100,
+          "lineTotal": 1000
+        },
+        {
+          "productId": "3",
+          "quantity": 5,
+          "unitPrice": 350,
+          "lineTotal": 1750
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 2750,
+      "vatAmount": 275,
+      "grandTotal": 3025,
+      "status": "Approved"
+    },
+    {
+      "id": "po-013",
+      "poNumber": "PO-013",
+      "supplier": "Gamma Distributors",
+      "warehouse": "Khulna Warehouse",
+      "shippingAddress": "Rupsha, Khulna",
+      "vatRate": 15,
+      "orderDate": "2024-10-02",
+      "items": [
+        {
+          "productId": "5",
+          "quantity": 10,
+          "unitPrice": 500,
+          "lineTotal": 5000
+        }
+      ],
+      "notes": "Payment pending",
+      "attachment": "",
+      "subtotal": 5000,
+      "vatAmount": 750,
+      "grandTotal": 5750,
+      "status": "Received"
+    },
+    {
+      "id": "po-014",
+      "poNumber": "PO-014",
+      "supplier": "Delta Supplies",
+      "warehouse": "Dhaka Warehouse",
+      "shippingAddress": "Mohakhali, Dhaka",
+      "vatRate": 5,
+      "orderDate": "2024-10-18",
+      "items": [
+        {
+          "productId": "2",
+          "quantity": 8,
+          "unitPrice": 200,
+          "lineTotal": 1600
+        }
+      ],
+      "notes": "",
+      "attachment": "",
+      "subtotal": 1600,
+      "vatAmount": 80,
+      "grandTotal": 1680,
+      "status": "Draft"
+    },
+    {
+      "id": "po-015",
+      "poNumber": "PO-015",
+      "supplier": "Orion Imports",
+      "warehouse": "Sylhet Warehouse",
+      "shippingAddress": "Tilagor, Sylhet",
+      "vatRate": 10,
+      "orderDate": "2024-11-05",
+      "items": [
+        {
+          "productId": "6",
+          "quantity": 4,
+          "unitPrice": 800,
+          "lineTotal": 3200
+        },
+        {
+          "productId": "3",
+          "quantity": 3,
+          "unitPrice": 350,
+          "lineTotal": 1050
+        }
+      ],
+      "notes": "Stock for Q4",
+      "attachment": "",
+      "subtotal": 4250,
+      "vatAmount": 425,
+      "grandTotal": 4675,
+      "status": "Approved"
+    },
+    {
+      "id": "aab0",
+      "supplier": "Alpha Ltd",
+      "warehouse": "Dhaka Warehouse",
+      "shippingAddress": "Quasi aut adipisci a",
+      "vatRate": "5",
+      "orderDate": "1973-12-08",
+      "items": [
+        {
+          "productId": "1",
+          "quantity": 3,
+          "unitPrice": 100,
+          "lineTotal": 300
+        },
+        {
+          "productId": "4",
+          "quantity": 13,
+          "unitPrice": 120,
+          "lineTotal": 1560
+        }
+      ],
+      "notes": "Labore dolor delectu",
+      "attachment": "",
+      "subtotal": 1860,
+      "vatAmount": 93,
+      "grandTotal": 1953
     }
   ]
 }

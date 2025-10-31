@@ -30,10 +30,7 @@ export class PurchaseOrderForm implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  constructor(private fb: FormBuilder) // private poService: PurchaseOrderService,
-  // public router: Router,
-  // private route: ActivatedRoute
-  {}
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
     // Load dropdown data from service
@@ -201,8 +198,8 @@ export class PurchaseOrderForm implements OnInit {
     };
 
     if (this.isEditMode) {
-      const orderId = this.route.snapshot.paramMap.get('id');
-      this.poService.updateOrder(orderId!, purchaseOrderData).subscribe({
+      const orderId = String(this.route.snapshot.paramMap.get('id'));
+      this.poService.updateOrder(orderId, purchaseOrderData).subscribe({
         next: (data) => {
           console.log(data);
           alert('Order updated successfully');
