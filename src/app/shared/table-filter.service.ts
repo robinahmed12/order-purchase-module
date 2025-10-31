@@ -1,105 +1,118 @@
+// src/app/shared/table-filter.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { TableFilter } from './table-filter.model';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+} from 'rxjs';
+
+export interface TableFilters {
+  searchTerm: string;
+  status: string;
+  startDate: string;
+  endDate: string;
+  sortKey: string;
+  sortDirection: 'asc' | 'desc';
+  page: number;
+  pageSize: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class TableFilterService<T extends Record<string, any>> {
-  private originalData: T[] = [];
-  private filters$ = new BehaviorSubject<TableFilter>({
+  private allData: T[] = [];
+
+  private filters$ = new BehaviorSubject<TableFilters>({
     searchTerm: '',
     status: 'All',
-    startDate: null,
-    endDate: null,
+    startDate: '',
+    endDate: '',
+    sortKey: '',
+    sortDirection: 'asc',
     page: 1,
     pageSize: 10,
   });
 
+  private data$ = new BehaviorSubject<T[]>([]);
+
+  constructor() {
+    this.filteredData$ = combineLatest([this.data$, this.filters$]).pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(([data, filters]) => this.applyFilters(data, filters)),
+      shareReplay(1)
+    );
+
+    this.totalCount$ = this.filteredData$.pipe(map((data) => data.length));
+  }
+
+  filteredData$;
+  totalCount$;
+
+  /** set initial data */
   setData(data: T[]) {
-    this.originalData = data;
+    this.allData = data;
+    this.data$.next(data);
   }
 
-  updateFilters(patch: Partial<TableFilter>) {
-    this.filters$.next({ ...this.filters$.value, ...patch });
+  /** update filters reactively */
+  updateFilters(partial: Partial<TableFilters>) {
+    this.filters$.next({ ...this.filters$.value, ...partial });
   }
 
-  getFilteredData(): Observable<T[]> {
-    return this.filters$.pipe(
-      map((f) => {
-        let data = [...this.originalData];
-
-        //search functionality
-        if (f.searchTerm?.trim()) {
-          const term = f.searchTerm.toLowerCase();
-          data = data.filter(
-            (item) =>
-              item['poNumber']?.toLowerCase().includes(term) ||
-              item['supplier']?.toLowerCase().includes(term) ||
-              item['warehouse']?.toLowerCase().includes(term)
-          );
-        }
-
-        // status filtering
-        if (f.status && f.status !== 'All') {
-          data = data.filter((item) => item['status'] === f.status);
-        }
-
-        // date filtering
-        if (f.startDate && f.endDate) {
-          const start = new Date(f.startDate);
-          const end = new Date(f.endDate);
-          data = data.filter((item) => {
-            const orderDate = new Date(item['orderDate']);
-            return orderDate >= start && orderDate <= end;
-          });
-        }
-
-        // implementing sorting on column
-        if (f.sortKey) {
-          data.sort((a, b) => {
-            const aVal = a[f.sortKey!];
-            const bVal = b[f.sortKey!];
-            const compare = aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
-            return f.sortDirection === 'asc' ? compare : -compare;
-          });
-        }
-
-        // 
-        const startIdx = ((f.page || 1) - 1) * (f.pageSize || 10);
-        return data.slice(startIdx, startIdx + (f.pageSize || 10));
-      })
-    );
+  /** expose observables */
+  getFilteredData() {
+    return this.filteredData$;
+  }
+  getTotalCount() {
+    return this.totalCount$;
   }
 
-  getTotalCount(): Observable<number> {
-    return this.filters$.pipe(
-      map((f) => {
-        let data = [...this.originalData];
+  /** core filtering logic */
+  private applyFilters(data: T[], filters: TableFilters): T[] {
+    let filtered = [...data];
 
-        if (f.searchTerm?.trim()) {
-          const term = f.searchTerm.toLowerCase();
-          data = data.filter(
-            (item) =>
-              item['poNumber']?.toLowerCase().includes(term) ||
-              item['supplier']?.toLowerCase().includes(term) ||
-              item['warehouse']?.toLowerCase().includes(term)
-          );
-        }
+    // search
+    if (filters.searchTerm) {
+      const term = filters.searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (x) =>
+          x['poNumber']?.toLowerCase().includes(term) ||
+          x['supplier']?.toLowerCase().includes(term) ||
+          x['warehouse']?.toLowerCase().includes(term)
+      );
+    }
 
-        if (f.status && f.status !== 'All') {
-          data = data.filter((item) => item['status'] === f.status);
-        }
+    // status
+    if (filters.status !== 'All') {
+      filtered = filtered.filter((x) => x['status'] === filters.status);
+    }
 
-        if (f.startDate && f.endDate) {
-          const start = new Date(f.startDate);
-          const end = new Date(f.endDate);
-          data = data.filter((item) => {
-            const orderDate = new Date(item['orderDate']);
-            return orderDate >= start && orderDate <= end;
-          });
-        }
+    // date range
+    if (filters.startDate && filters.endDate) {
+      const start = new Date(filters.startDate).getTime();
+      const end = new Date(filters.endDate).getTime();
+      filtered = filtered.filter((x) => {
+        const d = new Date(x['orderDate']).getTime();
+        return d >= start && d <= end;
+      });
+    }
 
-        return data.length;
-      })
-    );
+    // sorting
+    if (filters.sortKey) {
+      filtered.sort((a, b) => {
+        const aVal = a[filters.sortKey];
+        const bVal = b[filters.sortKey];
+        return filters.sortDirection === 'asc' ? (aVal > bVal ? 1 : -1) : aVal < bVal ? 1 : -1;
+      });
+    }
+
+    // pagination
+    const startIdx = (filters.page - 1) * filters.pageSize;
+    const endIdx = startIdx + filters.pageSize;
+
+    return filtered.slice(startIdx, endIdx);
   }
 }

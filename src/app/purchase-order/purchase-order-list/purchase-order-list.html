@@ -35,7 +35,7 @@
             type="date"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
             [(ngModel)]="startDate"
-            (change)="onDateRange(startDate, endDate)"
+            (change)="onDateRange()"
           />
         </div>
 
@@ -46,7 +46,7 @@
             type="date"
             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
             [(ngModel)]="endDate"
-            (change)="onDateRange(startDate, endDate)"
+            (change)="onDateRange()"
           />
         </div>
 
@@ -129,8 +129,10 @@
                 <span class="text-gray-300">|</span>
                 <button
                   (click)="handleDelete(order.id)"
-                 class="text-red-600 hover:text-red-800" title="Delete">
-                 Delete
+                  class="text-red-600 hover:text-red-800"
+                  title="Delete"
+                >
+                  Delete
                 </button>
               </div>
             </td>
@@ -144,18 +146,18 @@
           }
         </tbody>
       </table>
-
-      
     </div>
 
-    <!-- Pagination -->
-    <div class="px-6 py-4 bg-gray-50 rounded-b-lg border-t border-gray-200 flex justify-end">
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 rounded-b-lg flex justify-end">
       <pagination
         [totalItems]="(totalCount$ | async) || 0"
         [itemsPerPage]="10"
-        (pageChanged)="onPageChange($event.page)"
-      >
-      </pagination>
+        [maxSize]="5"
+        [boundaryLinks]="true"
+        [rotate]="true"
+        [(ngModel)]="currentPage"
+        (pageChanged)="onPageChange($event)"
+      ></pagination>
     </div>
   </div>
 </div>
