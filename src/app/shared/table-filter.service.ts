@@ -7,17 +7,9 @@ import {
   map,
   shareReplay,
 } from 'rxjs';
+import { TableFilters } from './table-filter.model';
 
-export interface TableFilters {
-  searchTerm: string;
-  status: string;
-  startDate: string;
-  endDate: string;
-  sortKey: string;
-  sortDirection: 'asc' | 'desc';
-  page: number;
-  pageSize: number;
-}
+
 
 @Injectable({ providedIn: 'root' })
 export class TableFilterService<T extends Record<string, any>> {
@@ -117,20 +109,22 @@ export class TableFilterService<T extends Record<string, any>> {
     return filtered.slice(startIdx, endIdx);
   }
 
+
   // query params sync
   getFilters(): TableFilters {
-    return this.filters$.value;
-  }
+  return this.filters$.value;
+}
 
-  setFiltersFromQuery(params: Partial<TableFilters>) {
-    const current = this.filters$.value;
-    const merged: TableFilters = {
-      ...current,
-      ...params,
-      page: Number(params.page) || 1,
-      pageSize: Number(params.pageSize) || 10,
-      sortDirection: params.sortDirection === 'desc' ? 'desc' : 'asc',
-    };
-    this.filters$.next(merged);
-  }
+setFiltersFromQuery(params: Partial<TableFilters>) {
+  const current = this.filters$.value;
+  const merged: TableFilters = {
+    ...current,
+    ...params,
+    page: Number(params.page) || 1,
+    pageSize: Number(params.pageSize) || 10,
+    sortDirection: params.sortDirection === 'desc' ? 'desc' : 'asc',
+  };
+  this.filters$.next(merged);
+}
+
 }

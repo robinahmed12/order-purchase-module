@@ -1,217 +1,228 @@
-<div class="container mt-8 mx-auto py-6 px-4 max-w-7xl">
+<div class="container mx-auto max-w-7xl px-4 py-6 mt-8">
   <h3 class="text-2xl font-bold text-white mb-6">Create Purchase Order</h3>
 
-  <form [formGroup]="poForm" (ngSubmit)="onSubmit()" class="bg-white rounded-lg shadow-lg p-6">
-    <!-- Header -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <!-- supplier -->
+  <form [formGroup]="poForm" (ngSubmit)="onSubmit()" class="bg-white rounded-xl shadow-lg p-6">
+    <!-- Header Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Supplier Selection -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Supplier</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Supplier</label>
         <select
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors"
           formControlName="supplier"
         >
-          <option value="">Select</option>
+          <option value="">Select Supplier</option>
           @for (s of suppliers$ | async; track s.name) {
           <option [value]="s.name">{{ s.name }}</option>
           }
         </select>
         @if (poForm.get('supplier')?.touched && poForm.get('supplier')?.invalid) {
-        <div class="text-red-600 text-sm mt-1">Supplier is required.</div>
+        <div class="text-red-600 text-sm mt-2 font-medium">Please select a supplier</div>
         }
       </div>
 
-      <!-- warehouse -->
+      <!-- Warehouse Selection -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Warehouse</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Warehouse</label>
         <select
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors"
           formControlName="warehouse"
         >
-          <option value="">Select</option>
+          <option value="">Select Warehouse</option>
           @for (w of warehouses$ | async; track w.name) {
           <option [value]="w.name">{{ w.name }}</option>
           }
         </select>
         @if (poForm.get('warehouse')?.touched && poForm.get('warehouse')?.invalid) {
-        <div class="text-red-600 text-sm mt-1">warehouse is required.</div>
+        <div class="text-red-600 text-sm mt-2 font-medium">Please select a warehouse</div>
         }
       </div>
-      <!-- order date -->
+
+      <!-- Order Date -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Order Date</label>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Order Date</label>
         <input
           type="date"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors"
           formControlName="orderDate"
         />
       </div>
     </div>
-    <!-- shipping address -->
-    <div class="mb-6">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Shipping Address</label>
+
+    <!-- Shipping Address -->
+    <div class="mb-8">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Shipping Address</label>
       <textarea
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors resize-none"
         formControlName="shippingAddress"
         rows="3"
+        placeholder="Enter complete shipping address"
       ></textarea>
       @if (poForm.get('shippingAddress')?.touched && poForm.get('shippingAddress')?.invalid) {
-      <div class="text-red-600 text-sm mt-1">shippingAddress is required.</div>
+      <div class="text-red-600 text-sm mt-2 font-medium">Shipping address is required</div>
       }
     </div>
-    <!-- vat rate -->
-    <div class="mb-6 max-w-xs">
-      <label class="block text-sm font-medium text-gray-700 mb-2">VAT Rate (%)</label>
+
+    <!-- VAT Rate -->
+    <div class="mb-8 max-w-xs">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">VAT Rate (%)</label>
       <select
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors"
         formControlName="vatRate"
       >
-        <option value="">Select</option>
+        <option value="">Select VAT Rate</option>
         @for (v of vatRates$ | async; track v.rate) {
         <option [value]="v.rate">{{ v.rate }}%</option>
         }
       </select>
       @if (poForm.get('vatRate')?.touched && poForm.get('vatRate')?.invalid) {
-      <div class="text-red-600 text-sm mt-1">VAT rate is required.</div>
+      <div class="text-red-600 text-sm mt-2 font-medium">Please select a VAT rate</div>
       }
     </div>
 
-    <!-- Items Table -->
-    <h5 class="text-xl font-semibold text-gray-800 mb-4">Items</h5>
-    <div class="overflow-x-auto mb-4">
-      <table class="min-w-full border border-gray-300">
-        <thead class="bg-[#166534]">
-          <tr>
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
-            >
-              Product
-            </th>
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
-            >
-              Qty
-            </th>
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
-            >
-              Unit Price
-            </th>
-            <th
-              class="px-4 py-3 text-left text-sm font-semibold text-white border-r border-gray-400"
-            >
-              Total
-            </th>
-            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Action</th>
-          </tr>
-        </thead>
-        <tbody formArrayName="items">
-          @for (item of items.controls; track $index; let i = $index) {
-          <tr [formGroupName]="i" class="border-b border-gray-300 hover:bg-gray-50">
-            <td class="px-4 py-3 border-r border-gray-300">
-              <select
-                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
-                formControlName="product"
-                (change)="onProductChange(i)"
-              >
-                <option value="">Select</option>
-                @for (p of products$ | async; track p.name) {
-                <option [value]="p.id">{{ p.name }}</option>
+    <!-- Items Section -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h5 class="text-xl font-semibold text-gray-800">Order Items</h5>
+        <button
+          type="button"
+          (click)="addItem()"
+          class="px-5 py-2.5 bg-[#1B5E20] text-white text-sm font-semibold rounded-lg hover:bg-[#2E7D32] transition-colors shadow-md flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+          Add Item
+        </button>
+      </div>
+
+      <!-- Items Table -->
+      <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-[#1B5E20]">
+            <tr>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-white">Product</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-white">Quantity</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-white">Unit Price</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-white">Total</th>
+              <th class="px-6 py-4 text-left text-sm font-semibold text-white">Actions</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items" class="bg-white divide-y divide-gray-200">
+            @for (item of items.controls; track $index; let i = $index) {
+            <tr [formGroupName]="i" class="hover:bg-[#F1F8E9] transition-colors">
+              <td class="px-6 py-4">
+                <select
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2E7D32] focus:border-transparent transition-colors"
+                  formControlName="product"
+                  (change)="onProductChange(i)"
+                >
+                  <option value="">Select Product</option>
+                  @for (p of products$ | async; track p.name) {
+                  <option [value]="p.id">{{ p.name }}</option>
+                  }
+                </select>
+              </td>
+              <td class="px-6 py-4">
+                <input
+                  type="number"
+                  formControlName="quantity"
+                  min="1"
+                  class="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2E7D32] focus:border-transparent transition-colors"
+                  (input)="calculateTotals()"
+                />
+                @if (item.get('quantity')?.touched && item.get('quantity')?.invalid) {
+                <div class="text-red-600 text-xs mt-1 font-medium">Minimum quantity is 1</div>
                 }
-              </select>
-            </td>
-            <td class="px-4 py-3 border-r border-gray-300">
-              <input
-                type="number"
-                formControlName="quantity"
-                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
-                (input)="calculateTotals()"
-              />
-              @if (item.get('quantity')?.touched && item.get('quantity')?.invalid) {
-              <div class="text-red-600 text-xs mt-1">Quantity must be at least 1.</div>
-              }
-            </td>
-            <td class="px-4 py-3 border-r border-gray-300">
-              <input
-                type="number"
-                formControlName="unitPrice"
-                class="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-[#22C55E]"
-                [readonly]="true"
-              />
-            </td>
-            <td class="px-4 py-3 border-r border-gray-300">
-              <span class="font-medium">{{ item.value.lineTotal | number : '1.2-2' }}</span>
-            </td>
-            <td class="px-4 py-3">
-              <button
-                class="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors"
-                (click)="removeItem(i)"
-                type="button"
-              >
-                X
-              </button>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <button
-      class="px-4 py-2 bg-[#22C55E] text-white text-sm font-medium rounded hover:bg-[#16A34A] transition-colors"
-      type="button"
-      (click)="addItem()"
-    >
-      + Add Item
-    </button>
-
-    <!-- Summary -->
-    <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-      <div class="space-y-2">
-        <p class="flex justify-between text-gray-700">
-          <span class="font-medium">Subtotal:</span>
-          <span class="font-semibold">{{ poForm.value.subtotal || 0 }}</span>
-        </p>
-        <p class="flex justify-between text-gray-700">
-          <span class="font-medium">VAT:</span>
-          <span class="font-semibold">{{ poForm.value.vatAmount || 0 }}</span>
-        </p>
-        <p class="flex justify-between text-lg text-gray-900 border-t border-gray-300 pt-2">
-          <span class="font-bold">Grand Total:</span>
-          <span class="font-bold">{{ poForm.value.grandTotal || 0 }}</span>
-        </p>
+              </td>
+              <td class="px-6 py-4">
+                <input
+                  type="number"
+                  formControlName="unitPrice"
+                  class="w-32 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none transition-colors"
+                  readonly
+                />
+              </td>
+              <td class="px-6 py-4">
+                <span class="font-semibold text-gray-900">{{ item.value.lineTotal | number : '1.2-2' }}</span>
+              </td>
+              <td class="px-6 py-4">
+                <button
+                  type="button"
+                  (click)="removeItem(i)"
+                  class="px-3 py-1.5 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 transition-colors shadow-sm flex items-center gap-1"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                  Remove
+                </button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Notes & Attach -->
-    <div class="mt-6 mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Memo / Notes</label>
+    <!-- Order Summary -->
+    <div class="mb-8 bg-[#F1F8E9] p-6 rounded-xl border border-[#A5D6A7]">
+      <h6 class="text-lg font-semibold text-gray-800 mb-4">Order Summary</h6>
+      <div class="space-y-3 max-w-md ml-auto">
+        <div class="flex justify-between items-center text-gray-700">
+          <span class="font-medium">Subtotal:</span>
+          <span class="font-semibold text-lg">{{ poForm.value.subtotal || 0 | currency }}</span>
+        </div>
+        <div class="flex justify-between items-center text-gray-700">
+          <span class="font-medium">VAT Amount:</span>
+          <span class="font-semibold text-lg">{{ poForm.value.vatAmount || 0 | currency }}</span>
+        </div>
+        <div class="flex justify-between items-center text-xl font-bold text-gray-900 border-t border-gray-300 pt-3">
+          <span>Grand Total:</span>
+          <span class="text-[#1B5E20]">{{ poForm.value.grandTotal || 0 | currency }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes & Attachments -->
+    <div class="mb-8">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Memo / Notes</label>
       <textarea
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] focus:border-transparent"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors resize-none"
         formControlName="notes"
         rows="4"
+        placeholder="Add any additional notes or instructions..."
       ></textarea>
     </div>
 
-    <div class="mb-6">
-      <label class="block text-sm font-medium text-gray-700 mb-2">Attachment</label>
-      <input
-        type="file"
-        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#22C55E] file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#166534] file:text-white hover:file:bg-[#16A34A] file:cursor-pointer"
-        (change)="onFileChange($event)"
-      />
+    <div class="mb-8">
+      <label class="block text-sm font-semibold text-gray-700 mb-2">Attachment</label>
+      <div class="relative">
+        <input
+          type="file"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:border-transparent transition-colors file:mr-4 file:py-2.5 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-[#1B5E20] file:text-white hover:file:bg-[#2E7D32] file:cursor-pointer file:transition-colors"
+          (change)="onFileChange($event)"
+        />
+      </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="flex gap-3">
-      <button type="submit" class="btn btn-primary">
-        {{ isEditMode ? 'Update Order' : 'Save Order' }}
-      </button>
+    <!-- Action Buttons -->
+    <div class="flex gap-4 items-center justify-between pt-6 border-t border-gray-200">
       <button
         type="button"
-        class="px-6 py-2 bg-gray-500 text-white font-medium rounded-md hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+        (click)="onCancel()"
+        class="px-8 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
       >
         Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-8 py-3 bg-[#1B5E20] text-white font-semibold rounded-lg hover:bg-[#2E7D32] transition-colors shadow-md focus:outline-none focus:ring-2 focus:ring-[#1B5E20] focus:ring-offset-2 flex items-center gap-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        {{ isEditMode ? 'Update Purchase Order' : 'Create Purchase Order' }}
       </button>
     </div>
   </form>

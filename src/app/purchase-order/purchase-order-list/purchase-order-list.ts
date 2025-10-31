@@ -1,3 +1,4 @@
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseOrderService } from '../services/purchase-order.service';
@@ -6,11 +7,21 @@ import { FormsModule } from '@angular/forms';
 import { TableFilterService } from '../../shared/table-filter.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { PurchaseOrderDetails } from '../Models/po.interface';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-purchase-order-list',
-  imports: [AsyncPipe, FormsModule, PaginationModule, DatePipe, CommonModule, RouterLink],
+  imports: [
+    AsyncPipe,
+    FormsModule,
+    PaginationModule,
+    DatePipe,
+    CommonModule,
+   
+    BsDatepickerModule,
+    BsDropdownModule
+  ],
   providers: [],
   templateUrl: './purchase-order-list.html',
   styleUrl: './purchase-order-list.css',

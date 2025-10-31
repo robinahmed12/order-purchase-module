@@ -53,7 +53,7 @@ export class PurchaseOrderService {
 
   updateOrder(id: string, data: PurchaseOrderDetails): Observable<PurchaseOrderDetails> {
     return this.http
-      .put<PurchaseOrderDetails>(`${this.baseUrl}/purchaseOrders/${id}`, data)
+      .patch<PurchaseOrderDetails>(`${this.baseUrl}/purchaseOrders/${id}`, data)
       .pipe(tap(() => this.loadOrders()));
   }
 

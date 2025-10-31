@@ -54,9 +54,6 @@ export class PurchaseOrderForm implements OnInit {
       this.addItem(); // default item for new form
     }
 
-    // Add one default item initially
-    this.addItem();
-
     // Whenever 'items' or 'vatRate' changes, recalculate totals
     combineLatest([
       this.poForm.get('items')!.valueChanges.pipe(startWith(this.items.value)),
@@ -208,6 +205,7 @@ export class PurchaseOrderForm implements OnInit {
         next: (data) => {
           console.log('Updated:', data);
           alert('Order updated successfully');
+
           this.router.navigate(['/order-list']);
         },
         error: (err) => console.error('Error updating order:', err),
@@ -215,13 +213,18 @@ export class PurchaseOrderForm implements OnInit {
     } else {
       this.poService.createOrder(purchaseOrderData).subscribe({
         next: () => {
-          // this.poService.loadOrders();
           alert('Order submitted successfully');
+          this.poForm.reset();
         },
 
         error: (err) => console.error('Error creating order:', err),
       });
     }
+  }
+
+  onCancel() {
+    this.router.navigate(['/purchase-orders/order-list']);
+    console.log("hi")
   }
 
   // Handle file input change (store file name)
