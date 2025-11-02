@@ -20,7 +20,7 @@ It allows users to **create, view, edit, delete, and filter** purchase orders wi
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** Angular 17+, RxJS, Tailwind/Bootstrap (optional)
+- **Frontend:** Angular 20+, RxJS, Tailwind/Bootstrap (optional)
 - **Backend (Mock API):** JSON Server
 - **UI Components:** ngx-bootstrap (pagination, modal, etc.)
 - **Reactive Forms:** Angular `FormBuilder`, `FormArray`, `FormGroup`
