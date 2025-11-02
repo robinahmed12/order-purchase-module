@@ -18,7 +18,7 @@ It allows users to **create, view, edit, delete, and filter** purchase orders wi
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend:** Angular 20+, RxJS, Tailwind/Bootstrap (optional)
 - **Backend (Mock API):** JSON Server
@@ -27,25 +27,27 @@ It allows users to **create, view, edit, delete, and filter** purchase orders wi
 
 ---
 
-##  Project Structure
+## Project Structure
 
+```
 src/
 ├── app/
-│ ├── purchase-order/
-│ │ ├── components/
-│ │ │ ├── purchase-order-form/
-│ │ │ ├── purchase-order-list/
-│ │ ├── services/
-│ │ │ └── purchase-order.service.ts
-│ │ ├── Models/
-│ │ │ └── po.interface.ts
-│ │ └── shared/
-│ │ ├── table-filter.service.ts
-│ │ └── table-filter.model.ts
-│ └── app.component.ts
+│   ├── purchase-order/
+│   │   ├── components/
+│   │   │   ├── purchase-order-form/
+│   │   │   ├── purchase-order-list/
+│   │   ├── services/
+│   │   │   └── purchase-order.service.ts
+│   │   ├── Models/
+│   │   │   └── po.interface.ts
+│   │   └── shared/
+│   │       ├── table-filter.service.ts
+│   │       └── table-filter.model.ts
+│   └── app.component.ts
 └── assets/
-└── mock-data/
-└── db.json
+    └── mock-data/
+        └── db.json
+```
 
 
 ---
@@ -66,7 +68,7 @@ You can add initial mock data if you like.
 
 ## ⚙️ Setup Instructions
 
-### 1️⃣ Clone the Repository
+###  Clone the Repository
 
 ```bash
 (https://github.com/robinahmed12/order-purchase-module.git)
@@ -76,6 +78,6 @@ Install Dependencies
 npm install
 
 npm start
-json server and prject both will run together
+json server and project both will run together
 
 ---
