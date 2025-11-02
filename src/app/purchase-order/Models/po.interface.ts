@@ -33,7 +33,7 @@ export interface PurchaseOrderDetails {
   grandTotal: number;
   status: 'Draft' | 'Approved' | 'Received';
   notes?: string;
-  attachment?:string
+  attachment?: string;
 }
 
 export interface orderedItem {

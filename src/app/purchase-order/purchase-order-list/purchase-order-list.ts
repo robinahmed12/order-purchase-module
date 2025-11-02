@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseOrderService } from '../services/purchase-order.service';
 import { AsyncPipe, CommonModule, DatePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableFilterService } from '../../shared/table-filter.service';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { PurchaseOrderDetails } from '../Models/po.interface';
@@ -15,12 +15,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
   imports: [
     AsyncPipe,
     FormsModule,
+    ReactiveFormsModule,
     PaginationModule,
     DatePipe,
     CommonModule,
-   
     BsDatepickerModule,
-    BsDropdownModule
+    BsDropdownModule,
   ],
   providers: [],
   templateUrl: './purchase-order-list.html',
@@ -117,4 +117,15 @@ export class PurchaseOrderList implements OnInit {
       });
     }
   }
+
+  addOrder() {
+    this.router.navigate(['/purchase-orders/add-order']);
+  }
+
+  //   bsConfig = {
+  //   dateInputFormat: 'YYYY-MM-DD',
+  //   containerClass: 'theme-blue'
+  // };
+  // dateRange!: Date[];
+
 }
