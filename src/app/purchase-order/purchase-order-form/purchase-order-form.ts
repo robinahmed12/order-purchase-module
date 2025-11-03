@@ -62,12 +62,14 @@ export class PurchaseOrderForm implements OnInit {
   }
 
   initForm() {
+    const today = new Date().toISOString().split('T')[0];
+
     this.poForm = this.fb.group({
       supplier: ['', Validators.required],
       warehouse: ['', Validators.required],
       shippingAddress: ['', Validators.required],
       vatRate: [null, Validators.required],
-      orderDate: ['', Validators.required],
+      orderDate: [today, Validators.required],
       items: this.fb.array([]),
       notes: [''],
       attachment: [''],

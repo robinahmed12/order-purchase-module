@@ -89,10 +89,10 @@
     {
       "id": "po-001",
       "poNumber": "PO-001",
-      "supplier": "Orion Imports",
+      "supplier": "Alpha Ltd",
       "warehouse": "Dhaka Warehouse",
       "shippingAddress": "House 10, Road 3, Dhanmondi, Dhaka",
-      "vatRate": 10,
+      "vatRate": "5",
       "orderDate": "2024-01-12",
       "items": [
         {
@@ -111,8 +111,8 @@
       "notes": "Urgent requirement",
       "attachment": "",
       "subtotal": 3000,
-      "vatAmount": 300,
-      "grandTotal": 3300,
+      "vatAmount": 150,
+      "grandTotal": 3150,
       "status": "Draft"
     },
     {

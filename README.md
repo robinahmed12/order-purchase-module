@@ -1,59 +1,83 @@
-# OrderPurchaseModule
+#  Purchase Order Management System (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+A simple and functional **Purchase Order Management** module built with **Angular**, **Reactive Forms**, and **RxJS**.  
+It allows users to **create, view, edit, delete, and filter** purchase orders with pagination, sorting, and query parameter syncing.
 
-## Development server
+---
 
-To start a local development server, run:
+##  Features
 
-```bash
-ng serve
+✅ Create and edit purchase orders  
+✅ Add or remove multiple items dynamically  
+✅ Auto-calculate subtotal, VAT, and grand total  
+✅ Search, filter by status, and date range  
+✅ Sorting and pagination  
+✅ URL query parameter sync for filters  
+✅ Modular architecture with shared filter service  
+✅ JSON-Server as a mock backend API  
+
+---
+
+##  Tech Stack
+
+- **Frontend:** Angular 20+, RxJS, Tailwind/Bootstrap (optional)
+- **Backend (Mock API):** JSON Server
+- **UI Components:** ngx-bootstrap (pagination, modal, etc.)
+- **Reactive Forms:** Angular `FormBuilder`, `FormArray`, `FormGroup`
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── purchase-order/
+│   │   ├── components/
+│   │   │   ├── purchase-order-form/
+│   │   │   ├── purchase-order-list/
+│   │   ├── services/
+│   │   │   └── purchase-order.service.ts
+│   │   ├── Models/
+│   │   │   └── po.interface.ts
+│   │   └── shared/
+│   │       ├── table-filter.service.ts
+│   │       └── table-filter.model.ts
+│   └── app.component.ts
+└── assets/
+    └── mock-data/
+        └── db.json
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-```bash
-ng generate component component-name
-```
+ db.json example:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+{
+  "purchaseOrders": [],
+  "suppliers": [],
+  "warehouses": [],
+  "products": [],
+  "vatRates": []
+}
 
-```bash
-ng generate --help
-```
 
-## Building
+You can add initial mock data if you like.
 
-To build the project run:
+## ⚙️ Setup Instructions
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+###  Clone the Repository
 
 ```bash
-ng test
-```
+(https://github.com/robinahmed12/order-purchase-module.git)
+cd purchase-order-module
 
-## Running end-to-end tests
+Install Dependencies
+npm install
 
-For end-to-end (e2e) testing, run:
+npm start
+json server and project both will run together
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---

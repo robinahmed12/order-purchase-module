@@ -1,92 +1,34 @@
 <header class="bg-[#166534] shadow-sm">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <!-- Logo and Mobile Menu Button -->
-            <div class="flex items-center">
-                <div class="">
-                    <h1 class="text-white text-xl font-bold tracking-wide">OPM</h1>
-                </div>
-                
-                <!-- Desktop Navigation Links -->
-                <div class="hidden  md:block ml-10">
-                    <div class="flex  space-x-8">
-                        <a routerLink="/" 
-                           class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">
-                            Home
-                        </a>
-                        <a routerLink="/purchase-orders/order-list" 
-                           class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">
-                            Order List
-                        </a>
-                        <a routerLink="/purchase-orders/add-order" 
-                           class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium px-3 py-2 rounded-md">
-                            Add Order
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Desktop Login Button -->
-            <div class="hidden md:block">
-                <button class="bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm">
-                    Login
-                </button>
-            </div>
-
-            <!-- Mobile menu button -->
-            <div class="md:hidden">
-                <button type="button" 
-                        (click)="isMobileMenuOpen = !isMobileMenuOpen"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#22C55E] hover:bg-[#1B5E20] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition-colors duration-200"
-                        aria-controls="mobile-menu" 
-                        [attr.aria-expanded]="isMobileMenuOpen">
-                    <span class="sr-only">Open main menu</span>
-                    <!-- Hamburger Icon -->
-                    <svg [class.hidden]="isMobileMenuOpen" 
-                         [class.block]="!isMobileMenuOpen" 
-                         class="h-6 w-6" 
-                         fill="none" 
-                         viewBox="0 0 24 24" 
-                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                    <!-- Close Icon -->
-                    <svg [class.hidden]="!isMobileMenuOpen" 
-                         [class.block]="isMobileMenuOpen" 
-                         class="h-6 w-6" 
-                         fill="none" 
-                         viewBox="0 0 24 24" 
-                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+    <nav class="flex py-3 items-center justify-between max-w-7xl mx-auto px-6">
+        <!-- Logo -->
+        <div>
+            <h1 class="text-white text-xl font-bold tracking-wide">OPM</h1>
         </div>
-
-        <!-- Mobile Menu -->
-        <div class="md:hidden" [class.hidden]="!isMobileMenuOpen" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-[#1B5E20] rounded-lg mt-2 shadow-lg">
-                <a routerLink="/" 
-                   (click)="isMobileMenuOpen = false"
-                   class="text-white hover:text-[#22C55E] block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+        
+        <!-- Navigation Links -->
+        <ul class="flex gap-8 items-center">
+            <li>
+                <a routerLink="/" class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium">
                     Home
                 </a>
-                <a routerLink="/purchase-orders/order-list" 
-                   (click)="isMobileMenuOpen = false"
-                   class="text-white hover:text-[#22C55E] block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+            </li>
+            <li>
+                <a routerLink="/purchase-orders/order-list" class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium">
                     Order List
                 </a>
-                <a routerLink="/purchase-orders/add-order" 
-                   (click)="isMobileMenuOpen = false"
-                   class="text-white hover:text-[#22C55E] block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+            </li>
+            <li>
+                <a routerLink="/purchase-orders/add-order" class="text-white hover:text-[#22C55E] transition-colors duration-200 text-sm font-medium">
                     Add Order
                 </a>
-                <div class="pt-4 border-t border-[#22C55E]">
-                    <button class="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white px-4 py-2 rounded-md text-base font-medium transition-colors duration-200 shadow-sm">
-                        Login
-                    </button>
-                </div>
-            </div>
+            </li>
+        </ul>
+        
+        <!-- Login Button -->
+        <div>
+            <button class="bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-2 rounded-md text-sm font-medium transition-colors duration-200 shadow-sm">
+                Login
+            </button>
         </div>
     </nav>
 </header>
