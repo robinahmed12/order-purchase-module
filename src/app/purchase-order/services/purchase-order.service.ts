@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import {
   Product,
   PurchaseOrderDetails,
@@ -61,5 +61,11 @@ export class PurchaseOrderService {
     return this.http
       .delete<PurchaseOrderDetails>(`${this.baseUrl}/purchaseOrders/${id}`)
       .pipe(tap(() => this.loadOrders()));
+  }
+
+    getTotalAmount(): Observable<number> {
+    return this.orders$.pipe(
+      map(orders => orders.reduce((sum, o) => sum + (o.grandTotal || 0), 0))
+    );
   }
 }

@@ -9,8 +9,6 @@ import {
 } from 'rxjs';
 import { TableFilters } from './table-filter.model';
 
-
-
 @Injectable({ providedIn: 'root' })
 export class TableFilterService<T extends Record<string, any>> {
   // Full dataset (unfiltered)
@@ -109,22 +107,20 @@ export class TableFilterService<T extends Record<string, any>> {
     return filtered.slice(startIdx, endIdx);
   }
 
-
   // query params sync
   getFilters(): TableFilters {
-  return this.filters$.value;
-}
+    return this.filters$.value;
+  }
 
-setFiltersFromQuery(params: Partial<TableFilters>) {
-  const current = this.filters$.value;
-  const merged: TableFilters = {
-    ...current,
-    ...params,
-    page: Number(params.page) || 1,
-    pageSize: Number(params.pageSize) || 10,
-    sortDirection: params.sortDirection === 'desc' ? 'desc' : 'asc',
-  };
-  this.filters$.next(merged);
-}
-
+  setFiltersFromQuery(params: Partial<TableFilters>) {
+    const current = this.filters$.value;
+    const merged: TableFilters = {
+      ...current,
+      ...params,
+      page: Number(params.page) || 1,
+      pageSize: Number(params.pageSize) || 10,
+      sortDirection: params.sortDirection === 'desc' ? 'desc' : 'asc',
+    };
+    this.filters$.next(merged);
+  }
 }

@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-purchase-order-form',
   standalone: true,
+
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './purchase-order-form.html',
   styleUrl: './purchase-order-form.css',
@@ -119,7 +120,10 @@ export class PurchaseOrderForm implements OnInit {
 
     const vatRate = this.poForm.get('vatRate')?.value || 0;
     const vatAmount = (subtotal * vatRate) / 100;
+    console.log(vatAmount);
+
     const grandTotal = subtotal + vatAmount;
+    console.log(grandTotal);
 
     // Patch totals without triggering more recalculations
     this.poForm.patchValue({ subtotal, vatAmount, grandTotal }, { emitEvent: false });
@@ -226,7 +230,7 @@ export class PurchaseOrderForm implements OnInit {
 
   onCancel() {
     this.router.navigate(['/purchase-orders/order-list']);
-    console.log("hi")
+    console.log('hi');
   }
 
   // Handle file input change (store file name)
